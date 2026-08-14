@@ -8,6 +8,7 @@ class WebSocketClient {
   private maxReconnectAttempts = 5;
 
   private isIntentionalClose = false;
+  private pingInterval: NodeJS.Timeout | null = null;
 
   connect(token: string) {
     const wsBase = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8000';
@@ -28,6 +29,14 @@ class WebSocketClient {
 
     this.ws.onopen = () => {
       this.reconnectAttempts = 0;
+      
+      // Start ping interval (every 30 seconds)
+      if (this.pingInterval) clearInterval(this.pingInterval);
+      this.pingInterval = setInterval(() => {
+        if (this.ws?.readyState === WebSocket.OPEN) {
+          this.ws.send(JSON.stringify({ type: 'ping' }));
+        }
+      }, 30000);
     };
 
     this.ws.onmessage = (event) => {
@@ -40,6 +49,10 @@ class WebSocketClient {
     };
 
     this.ws.onclose = () => {
+      if (this.pingInterval) {
+        clearInterval(this.pingInterval);
+        this.pingInterval = null;
+      }
       if (!this.isIntentionalClose && this.reconnectAttempts < this.maxReconnectAttempts) {
         setTimeout(() => {
           this.reconnectAttempts++;
@@ -62,6 +75,10 @@ class WebSocketClient {
 
   disconnect() {
     this.isIntentionalClose = true;
+    if (this.pingInterval) {
+      clearInterval(this.pingInterval);
+      this.pingInterval = null;
+    }
     if (this.ws) {
       this.ws.close();
       this.ws = null;
