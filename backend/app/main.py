@@ -21,7 +21,7 @@ frontend_url = os.getenv("FRONTEND_URL", "https://srushanth21.dev")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "https://srushanth21.dev", frontend_url],
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "https://srushanth21.dev", "https://chat.srushanth21.dev", frontend_url],
     allow_origin_regex=r"https://.*\.onrender\.com",
     allow_credentials=True,
     allow_methods=["*"],
