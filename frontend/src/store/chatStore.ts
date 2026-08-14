@@ -69,8 +69,13 @@ export const useChatStore = create<ChatState>((set, get) => ({
   },
 
   addContact: async (username) => {
-    await api.post('/contacts', { username });
-    get().fetchContacts();
+    try {
+      await api.post('/contacts', { username });
+      get().fetchContacts();
+    } catch (error: any) {
+      // Ignore 400 errors if user is already a contact, otherwise log
+      console.warn("Contact could not be added:", error?.response?.data || error.message);
+    }
   },
 
   searchUsers: async (q) => {

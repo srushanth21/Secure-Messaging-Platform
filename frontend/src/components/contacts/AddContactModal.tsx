@@ -33,7 +33,11 @@ export default function AddContactModal({ isOpen, onClose }: AddContactModalProp
 
   const handleStartChat = async (userId: string, username: string) => {
     // Add to contacts first so they appear in Create Group
-    await addContact(username);
+    try {
+      await addContact(username);
+    } catch (error) {
+      // Ignore 400 errors (Already in contacts)
+    }
     await createDM(userId);
     onClose();
   };
