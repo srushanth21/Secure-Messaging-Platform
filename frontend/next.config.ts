@@ -1,8 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  output: 'export',
   basePath: '/Secure-Messaging-Platform',
+  images: {
+    unoptimized: true,
+  },
   /* config options here */
 };
 
