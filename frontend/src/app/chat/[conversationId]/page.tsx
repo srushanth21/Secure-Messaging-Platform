@@ -11,8 +11,11 @@ import MessageBubble from '@/components/chat/MessageBubble';
 import MessageInput from '@/components/chat/MessageInput';
 import Spinner from '@/components/ui/Spinner';
 
-export default function ChatView({ params }: { params: { conversationId: string } }) {
-  const { conversationId } = params;
+import { useParams } from 'next/navigation';
+
+export default function ChatView() {
+  const params = useParams();
+  const conversationId = params?.conversationId as string;
   const currentUser = useAuthStore(s => s.user);
   const { conversations, fetchConversations, markAsRead } = useChatStore();
   
