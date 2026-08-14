@@ -11,7 +11,6 @@ import MessageBubble from '@/components/chat/MessageBubble';
 import MessageInput from '@/components/chat/MessageInput';
 import Spinner from '@/components/ui/Spinner';
 
-import { useParams } from 'next/navigation';
 
 export default function ChatView() {
   const params = useParams();
